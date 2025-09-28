@@ -18,46 +18,36 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [chatHistory, setChatHistory] = useState<ChatHistory[]>([
-    {
-      id: '1',
-      title: 'A+A 2025 Ürün Kategorileri',
-      date: 'Bugün',
-      messages: []
-    },
-    {
-      id: '2', 
-      title: 'Fuar Tarihleri ve Konum',
-      date: 'Dün',
-      messages: []
-    },
-    {
-      id: '3',
-      title: 'Kongre Programı Detayları',
-      date: '2 gün önce',
-      messages: []
-    },
-    {
-      id: '4',
-      title: 'Etkinlik ve Gösterimler',
-      date: '3 gün önce',
-      messages: []
-    },
-    {
-      id: '5',
-      title: 'Bilet ve Katılım Bilgileri',
-      date: '1 hafta önce',
-      messages: []
-    }
-  ])
+  const [chatHistory, setChatHistory] = useState<ChatHistory[]>([])
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null)
+
+  const startNewChat = () => {
+    setMessages([])
+    setCurrentChatId(null)
+    setInput('')
+  }
 
   const sendMessage = async () => {
     if (!input.trim()) return
 
     const userMessage: Message = { role: 'user', content: input }
-    setMessages(prev => [...prev, userMessage])
+    const newMessages = [...messages, userMessage]
+    setMessages(newMessages)
     setInput('')
     setIsLoading(true)
+
+    // Eğer yeni sohbet başlatılıyorsa, sohbet geçmişine ekle
+    if (!currentChatId) {
+      const newChatId = Date.now().toString()
+      const newChat: ChatHistory = {
+        id: newChatId,
+        title: input.length > 30 ? input.substring(0, 30) + '...' : input,
+        date: 'Şimdi',
+        messages: newMessages
+      }
+      setChatHistory(prev => [newChat, ...prev])
+      setCurrentChatId(newChatId)
+    }
 
     try {
       const response = await fetch('/api/chat', {
@@ -99,25 +89,38 @@ export default function Home() {
     <div className="min-h-screen flex">
       {/* Sidebar */}
       <div className="sidebar">
-        <div className="p-6">
-          <button className="sidebar-item new-chat w-full text-left">
+        <div className="p-6 h-full flex flex-col">
+          <button 
+            className="sidebar-item new-chat w-full text-left"
+            onClick={startNewChat}
+          >
             <span className="mr-3">+</span>
             Yeni Sohbet
           </button>
           
-          <div className="border-t border-gray-200 pt-6">
+          <div className="border-t border-gray-200 pt-6 flex-1">
             <h3 className="text-sm font-semibold text-gray-500 mb-4 px-4">Sohbetler</h3>
             <div className="space-y-2">
-              {chatHistory.map((chat, index) => (
-                <div 
-                  key={chat.id} 
-                  className={`sidebar-item ${index === 0 ? 'active' : ''}`}
-                >
-                  <span className="mr-3">💬</span>
-                  <span className="flex-1 truncate">{chat.title}</span>
-                  <span className="ml-auto text-xs text-gray-400">{chat.date}</span>
+              {chatHistory.length === 0 ? (
+                <div className="px-4 text-sm text-gray-400">
+                  Henüz sohbet geçmişi yok
                 </div>
-              ))}
+              ) : (
+                chatHistory.map((chat) => (
+                  <div 
+                    key={chat.id} 
+                    className={`sidebar-item ${currentChatId === chat.id ? 'active' : ''}`}
+                    onClick={() => {
+                      setCurrentChatId(chat.id)
+                      setMessages(chat.messages)
+                    }}
+                  >
+                    <span className="mr-3">💬</span>
+                    <span className="flex-1 truncate">{chat.title}</span>
+                    <span className="ml-auto text-xs text-gray-400">{chat.date}</span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
           
