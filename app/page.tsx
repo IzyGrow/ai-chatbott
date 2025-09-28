@@ -1,216 +1,220 @@
-'use client'
-
-import { useState, useRef } from 'react'
-
-interface Message {
-  role: 'user' | 'assistant'
-  content: string
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-export default function Home() {
-  const [messages, setMessages] = useState<Message[]>([])
-  const [input, setInput] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [pdfFile, setPdfFile] = useState<File | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file && file.type === 'application/pdf') {
-      setPdfFile(file)
-    } else {
-      alert('Lütfen sadece PDF dosyası seçin.')
-    }
+body {
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: #f7f7f8;
+  border-right: 1px solid #e5e5e5;
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+}
+
+/* Main content */
+.main-content {
+  margin-left: 260px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Chat container */
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 768px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Chat messages */
+.chat-messages {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+/* Message bubbles */
+.message-user {
+  background-color: #f0f0f0;
+  color: #333;
+  border-radius: 18px 18px 4px 18px;
+  padding: 12px 16px;
+  max-width: 70%;
+  margin-left: auto;
+  margin-bottom: 16px;
+  word-wrap: break-word;
+}
+
+.message-assistant {
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #e5e5e5;
+  border-radius: 18px 18px 18px 4px;
+  padding: 12px 16px;
+  max-width: 70%;
+  margin-right: auto;
+  margin-bottom: 16px;
+  word-wrap: break-word;
+}
+
+/* Input area */
+.input-container {
+  padding: 24px;
+  background-color: #ffffff;
+  border-top: 1px solid #e5e5e5;
+}
+
+.input-wrapper {
+  position: relative;
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.chat-input {
+  width: 100%;
+  padding: 12px 48px 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 24px;
+  font-size: 16px;
+  outline: none;
+  background-color: #ffffff;
+  transition: border-color 0.2s;
+}
+
+.chat-input:focus {
+  border-color: #10a37f;
+}
+
+.send-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #10a37f;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.send-button:hover {
+  background-color: #0d8f6b;
+}
+
+.send-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+/* Welcome message */
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+
+.welcome-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.welcome-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 32px;
+}
+
+/* Loading animation */
+.loading-dots {
+  display: inline-block;
+}
+
+.loading-dots::after {
+  content: '';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% { content: ''; }
+  40% { content: '.'; }
+  60% { content: '..'; }
+  80%, 100% { content: '...'; }
+}
+
+/* Sidebar items */
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  color: #333;
+  text-decoration: none;
+  border-radius: 8px;
+  margin: 4px 12px;
+  transition: background-color 0.2s;
+}
+
+.sidebar-item:hover {
+  background-color: #e5e5e5;
+}
+
+.sidebar-item.active {
+  background-color: #e5e5e5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
   }
-
-  const uploadPDF = async () => {
-    if (!pdfFile) return
-
-    const formData = new FormData()
-    formData.append('pdf', pdfFile)
-
-    try {
-      const response = await fetch('/api/upload-pdf', {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (response.ok) {
-        alert('PDF başarıyla yüklendi!')
-        setPdfFile(null)
-        if (fileInputRef.current) {
-          fileInputRef.current.value = ''
-        }
-      } else {
-        alert('PDF yükleme hatası!')
-      }
-    } catch (error) {
-      alert('PDF yükleme hatası!')
-    }
+  
+  .main-content {
+    margin-left: 0;
   }
-
-  const sendMessage = async () => {
-    if (!input.trim()) return
-
-    const userMessage: Message = { role: 'user', content: input }
-    setMessages(prev => [...prev, userMessage])
-    setInput('')
-    setIsLoading(true)
-
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: input }),
-      })
-
-      const data = await response.json()
-      
-      if (response.ok) {
-        const assistantMessage: Message = { role: 'assistant', content: data.response }
-        setMessages(prev => [...prev, assistantMessage])
-      } else {
-        const errorMessage: Message = { role: 'assistant', content: 'Üzgünüm, bir hata oluştu. Lütfen tekrar deneyin.' }
-        setMessages(prev => [...prev, errorMessage])
-      }
-    } catch (error) {
-      const errorMessage: Message = { role: 'assistant', content: 'Bağlantı hatası. Lütfen tekrar deneyin.' }
-      setMessages(prev => [...prev, errorMessage])
-    }
-
-    setIsLoading(false)
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      sendMessage()
-    }
-  }
-
-  return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="glass">
-        <div className="max-w-6xl mx-auto px-6 py-8">
-          <div className="text-center">
-            <h1 className="text-5xl font-bold gradient-text mb-4">🤖 AI Chatbot</h1>
-            <p className="text-xl text-white/90 font-medium">PDF'lerinizden öğrenen akıllı asistan</p>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <div className="flex-1 max-w-6xl mx-auto w-full px-6 py-8">
-        {/* PDF Upload Section */}
-        <div className="glass rounded-2xl p-8 mb-8">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-white mb-2">📄 PDF Yükle</h2>
-            <p className="text-white/80">Dokümanlarınızı yükleyin, AI ile sohbet edin</p>
-          </div>
-          
-          <div className="file-upload mb-4">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".pdf"
-              onChange={handleFileUpload}
-              className="hidden"
-              id="pdf-upload"
-            />
-            <label 
-              htmlFor="pdf-upload" 
-              className="cursor-pointer block"
-            >
-              <div className="text-4xl mb-4">📁</div>
-              <p className="text-lg font-semibold text-gray-700 mb-2">
-                {pdfFile ? pdfFile.name : 'PDF dosyası seçin'}
-              </p>
-              <p className="text-sm text-gray-500">
-                {pdfFile ? 'Dosya seçildi' : 'Dosya seçmek için tıklayın'}
-              </p>
-            </label>
-          </div>
-          
-          <div className="text-center">
-            <button
-              onClick={uploadPDF}
-              disabled={!pdfFile}
-              className="modern-btn px-8 py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              🚀 PDF Yükle
-            </button>
-          </div>
-        </div>
-
-        {/* Chat Section */}
-        <div className="glass rounded-2xl p-8">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-white mb-2">💬 Sohbet</h2>
-            <p className="text-white/80">AI ile konuşmaya başlayın</p>
-          </div>
-
-          {/* Chat Messages */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 h-96 overflow-y-auto mb-6">
-            {messages.length === 0 ? (
-              <div className="text-center text-white/80 mt-20">
-                <div className="text-6xl mb-4">👋</div>
-                <p className="text-xl font-semibold mb-2">Merhaba! Size nasıl yardımcı olabilirim?</p>
-                <p className="text-sm">Önce bir PDF yükleyin, sonra sorularınızı sorun.</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {messages.map((message, index) => (
-                  <div
-                    key={index}
-                    className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div className={message.role === 'user' ? 'message-user' : 'message-assistant'}>
-                      <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                    </div>
-                  </div>
-                ))}
-                {isLoading && (
-                  <div className="flex justify-start">
-                    <div className="message-assistant">
-                      <p className="text-sm loading-dots">Düşünüyor</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Input Area */}
-          <div className="flex gap-3">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Mesajınızı yazın..."
-              className="modern-input flex-1"
-              disabled={isLoading}
-            />
-            <button
-              onClick={sendMessage}
-              disabled={isLoading || !input.trim()}
-              className="modern-btn px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              ✈️ Gönder
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="glass text-center py-6">
-        <p className="text-white/70">
-          Powered by OpenAI • Made with ❤️
-        </p>
-      </footer>
-    </div>
-  )
 }
