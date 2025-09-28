@@ -185,14 +185,14 @@ export default function Home() {
                   
                   <div className="action-card" onClick={() => setInput("Kongre programı hakkında bilgi ver")}>
                     <div className="action-card-icon">🎓</div>
-                    <div className="action-card-title">Kongre Programı</div>
-                    <div className="action-card-desc">Uluslararası İş Güvenliği ve Sağlığı Kongresi</div>
+                    <div className="action-card-title">Fuar Programı</div>
+                    <div className="action-card-desc">Fuar Programları Hakkında Sorularınızı Sorun</div>
                   </div>
                   
                   <div className="action-card" onClick={() => setInput("Fuar etkinlikleri neler?")}>
                     <div className="action-card-icon">🎪</div>
-                    <div className="action-card-title">Etkinlikler</div>
-                    <div className="action-card-desc">Canlı gösterimler, moda şovları ve özel etkinlikler</div>
+                    <div className="action-card-title">Katılımcılar</div>
+                    <div className="action-card-desc">Katılımcılar Hakkında Sorularınızı Sorun</div>
                   </div>
                 </div>
                 
