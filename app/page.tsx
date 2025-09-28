@@ -153,8 +153,8 @@ export default function Home() {
             <button className="p-2 hover:bg-gray-100 rounded-lg">
               <span>📤</span>
             </button>
-            <span className="text-sm text-gray-500">Paylaş</span>
-            <span className="text-xs text-gray-400">by izygrow</span>
+            <span className="text-sm text-gray-500">Made</span>
+            <span className="text-xs text-gray-400">by IzyGrow</span>
           </div>
         </div>
 
@@ -165,16 +165,16 @@ export default function Home() {
             {messages.length === 0 ? (
               <div className="welcome-container">
                 <div className="ai-icon">🤖</div>
-                <h1 className="welcome-title">A+A 2025 fuarı hakkında bilgi alın</h1>
+                <h1 className="welcome-title">Fuar Karar Destek Sistemi</h1>
                 <p className="welcome-subtitle">
-                  İş güvenliği ve sağlığı alanındaki en büyük fuar hakkında detaylı bilgi edinin. Ürün kategorileri, etkinlikler ve katılım detayları için AI asistanınızla konuşun.
+                  Fuarlar hakkında sorularınızı sorun, Asistanınız size yanıt verir.
                 </p>
                 
                 <div className="action-cards">
                   <div className="action-card" onClick={() => setInput("A+A 2025 fuarında hangi ürün kategorileri var?")}>
                     <div className="action-card-icon">🛡️</div>
-                    <div className="action-card-title">Ürün Kategorileri</div>
-                    <div className="action-card-desc">A+A 2025'te sergilenen ürün ve çözümleri keşfet</div>
+                    <div className="action-card-title">Fuar Bilgileri</div>
+                    <div className="action-card-desc">Fuara Ait Sorularınızı Sorun/div>
                   </div>
                   
                   <div className="action-card" onClick={() => setInput("Fuar tarihleri ve konumu nedir?")}>
