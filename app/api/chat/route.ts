@@ -60,6 +60,8 @@ Kurallar:
 - Merhaba gibi selamlaşmalarda sadece "Merhaba! Fuarlar hakkında size nasıl yardımcı olabilirim?" şeklinde yanıt ver
 - Sorulara kısa ve net cevaplar ver (maksimum 2-3 paragraf)
 - Fuar dışı sorularda "Fuarlar hakkında sorularınızı yanıtlayabilirim" de
+- Fuar tarihleri, listeleri veya çoklu bilgi içeren sorularda madde madde (•) formatında yanıt ver
+- Her maddeyi net ve düzenli şekilde yaz
 - Türkçe yanıt ver`
 
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
