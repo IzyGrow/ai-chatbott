@@ -48,7 +48,7 @@ ${aaFuarBilgileri}
 
 Kullanıcının sorusunu fuar bilgilerine dayanarak yanıtla. Türkçe yanıt ver ve fuar hakkında detaylı bilgi ver.`
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" })
     
     const prompt = `${systemMessage}\n\nKullanıcı sorusu: ${message}`
     
