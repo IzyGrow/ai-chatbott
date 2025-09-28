@@ -41,12 +41,16 @@ Salon planı ve profesyonel danışma noktaları: Fuar alanı tematik bölgelere
     `
 
     // Gemini'ye gönderilecek sistem mesajı
-    const systemMessage = `Sen A+A 2025 fuarı hakkında uzman bir AI asistanısın. Aşağıdaki fuar bilgilerini kullanarak kullanıcının sorularını yanıtla. Eğer soru fuar içeriğiyle ilgili değilse, bunu belirt ve genel bilgilerle yardımcı olmaya çalış.
+    const systemMessage = `Sen A+A 2025 fuarı hakkında uzman bir AI asistanısın. Kullanıcının sorularını kısa, net ve öz şekilde yanıtla. 
 
 A+A 2025 Fuarı Bilgileri:
 ${aaFuarBilgileri}
 
-Kullanıcının sorusunu fuar bilgilerine dayanarak yanıtla. Türkçe yanıt ver ve fuar hakkında detaylı bilgi ver.`
+Kurallar:
+- Merhaba gibi selamlaşmalarda sadece "Merhaba! A+A 2025 fuarı hakkında size nasıl yardımcı olabilirim?" şeklinde yanıt ver
+- Sorulara kısa ve net cevaplar ver (maksimum 2-3 paragraf)
+- Fuar dışı sorularda "A+A 2025 fuarı hakkında sorularınızı yanıtlayabilirim" de
+- Türkçe yanıt ver`
 
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
     
