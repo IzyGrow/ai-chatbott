@@ -91,94 +91,126 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold text-gray-900">AI Chatbot</h1>
-          <p className="text-gray-600">PDF'lerinizden öğrenen akıllı asistan</p>
+      <header className="glass">
+        <div className="max-w-6xl mx-auto px-6 py-8">
+          <div className="text-center">
+            <h1 className="text-5xl font-bold gradient-text mb-4">🤖 AI Chatbot</h1>
+            <p className="text-xl text-white/90 font-medium">PDF'lerinizden öğrenen akıllı asistan</p>
+          </div>
         </div>
       </header>
 
-      {/* PDF Upload Section */}
-      <div className="bg-white border-b">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex gap-4 items-center">
+      {/* Main Content */}
+      <div className="flex-1 max-w-6xl mx-auto w-full px-6 py-8">
+        {/* PDF Upload Section */}
+        <div className="glass rounded-2xl p-8 mb-8">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-white mb-2">📄 PDF Yükle</h2>
+            <p className="text-white/80">Dokümanlarınızı yükleyin, AI ile sohbet edin</p>
+          </div>
+          
+          <div className="file-upload mb-4">
             <input
               ref={fileInputRef}
               type="file"
               accept=".pdf"
               onChange={handleFileUpload}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              className="hidden"
+              id="pdf-upload"
             />
+            <label 
+              htmlFor="pdf-upload" 
+              className="cursor-pointer block"
+            >
+              <div className="text-4xl mb-4">📁</div>
+              <p className="text-lg font-semibold text-gray-700 mb-2">
+                {pdfFile ? pdfFile.name : 'PDF dosyası seçin'}
+              </p>
+              <p className="text-sm text-gray-500">
+                {pdfFile ? 'Dosya seçildi' : 'Dosya seçmek için tıklayın'}
+              </p>
+            </label>
+          </div>
+          
+          <div className="text-center">
             <button
               onClick={uploadPDF}
               disabled={!pdfFile}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="modern-btn px-8 py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              PDF Yükle
+              🚀 PDF Yükle
+            </button>
+          </div>
+        </div>
+
+        {/* Chat Section */}
+        <div className="glass rounded-2xl p-8">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-white mb-2">💬 Sohbet</h2>
+            <p className="text-white/80">AI ile konuşmaya başlayın</p>
+          </div>
+
+          {/* Chat Messages */}
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 h-96 overflow-y-auto mb-6">
+            {messages.length === 0 ? (
+              <div className="text-center text-white/80 mt-20">
+                <div className="text-6xl mb-4">👋</div>
+                <p className="text-xl font-semibold mb-2">Merhaba! Size nasıl yardımcı olabilirim?</p>
+                <p className="text-sm">Önce bir PDF yükleyin, sonra sorularınızı sorun.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {messages.map((message, index) => (
+                  <div
+                    key={index}
+                    className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div className={message.role === 'user' ? 'message-user' : 'message-assistant'}>
+                      <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    </div>
+                  </div>
+                ))}
+                {isLoading && (
+                  <div className="flex justify-start">
+                    <div className="message-assistant">
+                      <p className="text-sm loading-dots">Düşünüyor</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Input Area */}
+          <div className="flex gap-3">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Mesajınızı yazın..."
+              className="modern-input flex-1"
+              disabled={isLoading}
+            />
+            <button
+              onClick={sendMessage}
+              disabled={isLoading || !input.trim()}
+              className="modern-btn px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              ✈️ Gönder
             </button>
           </div>
         </div>
       </div>
 
-      {/* Chat Messages */}
-      <div className="flex-1 max-w-4xl mx-auto w-full px-4 py-6">
-        <div className="bg-white rounded-lg shadow-sm border h-96 overflow-y-auto p-4 mb-4">
-          {messages.length === 0 ? (
-            <div className="text-center text-gray-500 mt-20">
-              <p>Merhaba! Size nasıl yardımcı olabilirim?</p>
-              <p className="text-sm mt-2">Önce bir PDF yükleyin, sonra sorularınızı sorun.</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {messages.map((message, index) => (
-                <div
-                  key={index}
-                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                      message.role === 'user'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 text-gray-900'
-                    }`}
-                  >
-                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                  </div>
-                </div>
-              ))}
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div className="bg-gray-200 text-gray-900 px-4 py-2 rounded-lg">
-                    <p className="text-sm">Düşünüyor...</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Input Area */}
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Mesajınızı yazın..."
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            disabled={isLoading}
-          />
-          <button
-            onClick={sendMessage}
-            disabled={isLoading || !input.trim()}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
-          >
-            Gönder
-          </button>
-        </div>
-      </div>
+      {/* Footer */}
+      <footer className="glass text-center py-6">
+        <p className="text-white/70">
+          Powered by OpenAI • Made with ❤️
+        </p>
+      </footer>
     </div>
   )
 }
