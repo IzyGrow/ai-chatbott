@@ -174,7 +174,7 @@ export default function Home() {
                   <div className="action-card" onClick={() => setInput("A+A 2025 fuarında hangi ürün kategorileri var?")}>
                     <div className="action-card-icon">🛡️</div>
                     <div className="action-card-title">Fuar Bilgileri</div>
-                    <div className="action-card-desc">Fuara Ait Sorularınızı Sorun/div>
+                    <div className="action-card-desc">Fuara Ait Sorularınızı Sorun</div>
                   </div>
                   
                   <div className="action-card" onClick={() => setInput("Fuar tarihleri ve konumu nedir?")}>
