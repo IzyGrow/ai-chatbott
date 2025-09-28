@@ -124,7 +124,7 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="mt-auto pt-6">
+          <div className="mt-auto pt-6 border-t border-gray-200">
             <div className="flex items-center px-4 text-sm text-gray-500">
               <span className="mr-2">⚙️</span>
               Ayarlar
@@ -145,8 +145,8 @@ export default function Home() {
               <span className="text-white text-lg">🤖</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-800">A+A 2025 AI Asistanı</h1>
-              <p className="text-sm text-gray-500">Fuar Karar Destek Sistemi</p>
+              <h1 className="text-xl font-bold text-gray-800">Fuar Karar Destek Sistemi</h1>
+              <p className="text-sm text-gray-500">AI Asistanı</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">
