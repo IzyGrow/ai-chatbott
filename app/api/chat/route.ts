@@ -68,6 +68,25 @@ Kullanıcının sorusunu fuar bilgilerine dayanarak yanıtla. Türkçe yanıt ve
 
   } catch (error) {
     console.error('Chat API hatası:', error)
-    return NextResponse.json({ error: 'Chat API hatası' }, { status: 500 })
+    
+    // Daha detaylı hata mesajı
+    let errorMessage = 'Bilinmeyen bir hata oluştu'
+    
+    if (error instanceof Error) {
+      if (error.message.includes('API key')) {
+        errorMessage = 'OpenAI API key geçersiz veya eksik'
+      } else if (error.message.includes('quota')) {
+        errorMessage = 'OpenAI API quota aşıldı'
+      } else if (error.message.includes('network')) {
+        errorMessage = 'Ağ bağlantı hatası'
+      } else {
+        errorMessage = `Hata: ${error.message}`
+      }
+    }
+    
+    return NextResponse.json({ 
+      error: errorMessage,
+      details: error instanceof Error ? error.message : 'Bilinmeyen hata'
+    }, { status: 500 })
   }
 }
