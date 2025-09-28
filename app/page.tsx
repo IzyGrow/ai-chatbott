@@ -7,10 +7,49 @@ interface Message {
   content: string
 }
 
+interface ChatHistory {
+  id: string
+  title: string
+  date: string
+  messages: Message[]
+}
+
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [chatHistory, setChatHistory] = useState<ChatHistory[]>([
+    {
+      id: '1',
+      title: 'A+A 2025 Ürün Kategorileri',
+      date: 'Bugün',
+      messages: []
+    },
+    {
+      id: '2', 
+      title: 'Fuar Tarihleri ve Konum',
+      date: 'Dün',
+      messages: []
+    },
+    {
+      id: '3',
+      title: 'Kongre Programı Detayları',
+      date: '2 gün önce',
+      messages: []
+    },
+    {
+      id: '4',
+      title: 'Etkinlik ve Gösterimler',
+      date: '3 gün önce',
+      messages: []
+    },
+    {
+      id: '5',
+      title: 'Bilet ve Katılım Bilgileri',
+      date: '1 hafta önce',
+      messages: []
+    }
+  ])
 
   const sendMessage = async () => {
     if (!input.trim()) return
@@ -69,21 +108,16 @@ export default function Home() {
           <div className="border-t border-gray-200 pt-6">
             <h3 className="text-sm font-semibold text-gray-500 mb-4 px-4">Sohbetler</h3>
             <div className="space-y-2">
-              <div className="sidebar-item active">
-                <span className="mr-3">💬</span>
-                Fuar Stratejisi Planlaması
-                <span className="ml-auto text-xs text-gray-400">Bugün</span>
-              </div>
-              <div className="sidebar-item">
-                <span className="mr-3">💬</span>
-                Katılımcı Analizi
-                <span className="ml-auto text-xs text-gray-400">Dün</span>
-              </div>
-              <div className="sidebar-item">
-                <span className="mr-3">💬</span>
-                Bütçe Optimizasyonu
-                <span className="ml-auto text-xs text-gray-400">2 gün önce</span>
-              </div>
+              {chatHistory.map((chat, index) => (
+                <div 
+                  key={chat.id} 
+                  className={`sidebar-item ${index === 0 ? 'active' : ''}`}
+                >
+                  <span className="mr-3">💬</span>
+                  <span className="flex-1 truncate">{chat.title}</span>
+                  <span className="ml-auto text-xs text-gray-400">{chat.date}</span>
+                </div>
+              ))}
             </div>
           </div>
           
@@ -128,34 +162,34 @@ export default function Home() {
             {messages.length === 0 ? (
               <div className="welcome-container">
                 <div className="ai-icon">🤖</div>
-                <h1 className="welcome-title">Fuar başarınız için yapay zeka desteği</h1>
+                <h1 className="welcome-title">A+A 2025 fuarı hakkında bilgi alın</h1>
                 <p className="welcome-subtitle">
-                  Fuar stratejinizi optimize etmek, hedef kitlenizi belirlemek ve ROI'nizi maksimize etmek için uzman AI asistanınızla konuşun.
+                  İş güvenliği ve sağlığı alanındaki en büyük fuar hakkında detaylı bilgi edinin. Ürün kategorileri, etkinlikler ve katılım detayları için AI asistanınızla konuşun.
                 </p>
                 
                 <div className="action-cards">
-                  <div className="action-card" onClick={() => setInput("Hedef kitle analizi yap")}>
-                    <div className="action-card-icon">🎯</div>
-                    <div className="action-card-title">Hedef Kitle Analizi</div>
-                    <div className="action-card-desc">Fuarımdaki potansiyel müşteri profilini belirle</div>
+                  <div className="action-card" onClick={() => setInput("A+A 2025 fuarında hangi ürün kategorileri var?")}>
+                    <div className="action-card-icon">🛡️</div>
+                    <div className="action-card-title">Ürün Kategorileri</div>
+                    <div className="action-card-desc">A+A 2025'te sergilenen ürün ve çözümleri keşfet</div>
                   </div>
                   
-                  <div className="action-card" onClick={() => setInput("Bütçe optimizasyonu öner")}>
-                    <div className="action-card-icon">📈</div>
-                    <div className="action-card-title">Bütçe Optimizasyonu</div>
-                    <div className="action-card-desc">Fuar bütçemi en verimli şekilde nasıl kullanabilirim?</div>
+                  <div className="action-card" onClick={() => setInput("Fuar tarihleri ve konumu nedir?")}>
+                    <div className="action-card-icon">📅</div>
+                    <div className="action-card-title">Fuar Bilgileri</div>
+                    <div className="action-card-desc">A+A 2025 tarihleri, konum ve katılım detayları</div>
                   </div>
                   
-                  <div className="action-card" onClick={() => setInput("Stand stratejisi öner")}>
-                    <div className="action-card-icon">🏢</div>
-                    <div className="action-card-title">Stand Stratejisi</div>
-                    <div className="action-card-desc">Dikkat çekici stand tasarımı için öneriler</div>
+                  <div className="action-card" onClick={() => setInput("Kongre programı hakkında bilgi ver")}>
+                    <div className="action-card-icon">🎓</div>
+                    <div className="action-card-title">Kongre Programı</div>
+                    <div className="action-card-desc">Uluslararası İş Güvenliği ve Sağlığı Kongresi</div>
                   </div>
                   
-                  <div className="action-card" onClick={() => setInput("Pazarlama taktikleri öner")}>
-                    <div className="action-card-icon">💡</div>
-                    <div className="action-card-title">Pazarlama Taktikleri</div>
-                    <div className="action-card-desc">Fuar öncesi ve sonrası pazarlama stratejileri</div>
+                  <div className="action-card" onClick={() => setInput("Fuar etkinlikleri neler?")}>
+                    <div className="action-card-icon">🎪</div>
+                    <div className="action-card-title">Etkinlikler</div>
+                    <div className="action-card-desc">Canlı gösterimler, moda şovları ve özel etkinlikler</div>
                   </div>
                 </div>
                 
