@@ -35,7 +35,10 @@ export default function Home() {
         const assistantMessage: Message = { role: 'assistant', content: data.response }
         setMessages(prev => [...prev, assistantMessage])
       } else {
-        const errorMessage: Message = { role: 'assistant', content: 'Üzgünüm, bir hata oluştu. Lütfen tekrar deneyin.' }
+        const errorMessage: Message = { 
+          role: 'assistant', 
+          content: `Hata: ${data.error || 'Bilinmeyen hata'}\n\nDetay: ${data.details || 'Detay bilgisi yok'}`
+        }
         setMessages(prev => [...prev, errorMessage])
       }
     } catch (error) {
