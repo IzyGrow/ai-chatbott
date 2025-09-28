@@ -1,220 +1,158 @@
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+'use client'
+
+import { useState } from 'react'
+
+interface Message {
+  role: 'user' | 'assistant'
+  content: string
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-}
+export default function Home() {
+  const [messages, setMessages] = useState<Message[]>([])
+  const [input, setInput] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-body {
-  background-color: #ffffff;
-  min-height: 100vh;
-}
+  const sendMessage = async () => {
+    if (!input.trim()) return
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+    const userMessage: Message = { role: 'user', content: input }
+    setMessages(prev => [...prev, userMessage])
+    setInput('')
+    setIsLoading(true)
 
-/* Sidebar */
-.sidebar {
-  background-color: #f7f7f8;
-  border-right: 1px solid #e5e5e5;
-  width: 260px;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-  overflow-y: auto;
-}
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: input }),
+      })
 
-/* Main content */
-.main-content {
-  margin-left: 260px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+      const data = await response.json()
+      
+      if (response.ok) {
+        const assistantMessage: Message = { role: 'assistant', content: data.response }
+        setMessages(prev => [...prev, assistantMessage])
+      } else {
+        const errorMessage: Message = { role: 'assistant', content: 'Üzgünüm, bir hata oluştu. Lütfen tekrar deneyin.' }
+        setMessages(prev => [...prev, errorMessage])
+      }
+    } catch (error) {
+      const errorMessage: Message = { role: 'assistant', content: 'Bağlantı hatası. Lütfen tekrar deneyin.' }
+      setMessages(prev => [...prev, errorMessage])
+    }
 
-/* Header */
-.header {
-  background-color: #ffffff;
-  border-bottom: 1px solid #e5e5e5;
-  padding: 16px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* Chat container */
-.chat-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  max-width: 768px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-/* Chat messages */
-.chat-messages {
-  flex: 1;
-  padding: 24px;
-  overflow-y: auto;
-}
-
-/* Message bubbles */
-.message-user {
-  background-color: #f0f0f0;
-  color: #333;
-  border-radius: 18px 18px 4px 18px;
-  padding: 12px 16px;
-  max-width: 70%;
-  margin-left: auto;
-  margin-bottom: 16px;
-  word-wrap: break-word;
-}
-
-.message-assistant {
-  background-color: #ffffff;
-  color: #333;
-  border: 1px solid #e5e5e5;
-  border-radius: 18px 18px 18px 4px;
-  padding: 12px 16px;
-  max-width: 70%;
-  margin-right: auto;
-  margin-bottom: 16px;
-  word-wrap: break-word;
-}
-
-/* Input area */
-.input-container {
-  padding: 24px;
-  background-color: #ffffff;
-  border-top: 1px solid #e5e5e5;
-}
-
-.input-wrapper {
-  position: relative;
-  max-width: 768px;
-  margin: 0 auto;
-}
-
-.chat-input {
-  width: 100%;
-  padding: 12px 48px 12px 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 24px;
-  font-size: 16px;
-  outline: none;
-  background-color: #ffffff;
-  transition: border-color 0.2s;
-}
-
-.chat-input:focus {
-  border-color: #10a37f;
-}
-
-.send-button {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #10a37f;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.send-button:hover {
-  background-color: #0d8f6b;
-}
-
-.send-button:disabled {
-  background-color: #d1d5db;
-  cursor: not-allowed;
-}
-
-/* Welcome message */
-.welcome-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  text-align: center;
-}
-
-.welcome-title {
-  font-size: 32px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 8px;
-}
-
-.welcome-subtitle {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 32px;
-}
-
-/* Loading animation */
-.loading-dots {
-  display: inline-block;
-}
-
-.loading-dots::after {
-  content: '';
-  animation: dots 1.5s steps(4, end) infinite;
-}
-
-@keyframes dots {
-  0%, 20% { content: ''; }
-  40% { content: '.'; }
-  60% { content: '..'; }
-  80%, 100% { content: '...'; }
-}
-
-/* Sidebar items */
-.sidebar-item {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  color: #333;
-  text-decoration: none;
-  border-radius: 8px;
-  margin: 4px 12px;
-  transition: background-color 0.2s;
-}
-
-.sidebar-item:hover {
-  background-color: #e5e5e5;
-}
-
-.sidebar-item.active {
-  background-color: #e5e5e5;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .sidebar {
-    display: none;
+    setIsLoading(false)
   }
-  
-  .main-content {
-    margin-left: 0;
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      sendMessage()
+    }
   }
+
+  return (
+    <div className="min-h-screen flex">
+      {/* Sidebar */}
+      <div className="sidebar">
+        <div className="p-4">
+          <div className="flex items-center mb-6">
+            <div className="w-8 h-8 bg-gray-800 rounded flex items-center justify-center mr-3">
+              <span className="text-white text-sm font-bold">AI</span>
+            </div>
+            <span className="font-semibold text-gray-800">AI Chatbot</span>
+          </div>
+          
+          <button className="sidebar-item w-full text-left mb-4">
+            <span className="mr-3">✏️</span>
+            Yeni sohbet
+          </button>
+          
+          <div className="border-t border-gray-200 pt-4">
+            <h3 className="text-sm font-semibold text-gray-500 mb-2 px-4">Sohbetler</h3>
+            <div className="space-y-1">
+              <div className="sidebar-item active">
+                <span className="mr-3">💬</span>
+                Mevcut sohbet
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="main-content">
+        {/* Header */}
+        <div className="header">
+          <div className="flex items-center">
+            <h1 className="text-lg font-semibold">AI Chatbot</h1>
+          </div>
+          <div className="flex items-center space-x-4">
+            <button className="p-2 hover:bg-gray-100 rounded-lg">
+              <span>❓</span>
+            </button>
+            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+              <span className="text-sm font-semibold">U</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Chat Container */}
+        <div className="chat-container">
+          {/* Chat Messages */}
+          <div className="chat-messages">
+            {messages.length === 0 ? (
+              <div className="welcome-container">
+                <h1 className="welcome-title">Ne üzerinde çalışıyorsun?</h1>
+                <p className="welcome-subtitle">Herhangi bir şey sor</p>
+              </div>
+            ) : (
+              <div>
+                {messages.map((message, index) => (
+                  <div
+                    key={index}
+                    className={message.role === 'user' ? 'message-user' : 'message-assistant'}
+                  >
+                    <p className="whitespace-pre-wrap">{message.content}</p>
+                  </div>
+                ))}
+                {isLoading && (
+                  <div className="message-assistant">
+                    <p className="loading-dots">Düşünüyor</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Input Area */}
+          <div className="input-container">
+            <div className="input-wrapper">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Herhangi bir şey sor"
+                className="chat-input"
+                disabled={isLoading}
+              />
+              <button
+                onClick={sendMessage}
+                disabled={isLoading || !input.trim()}
+                className="send-button"
+              >
+                <span className="text-white text-sm">→</span>
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mt-2 text-center">
+              AI hata yapabilir. Önemli bilgileri kontrol edin.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
