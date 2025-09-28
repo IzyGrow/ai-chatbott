@@ -60,9 +60,9 @@ export default function Home() {
         <div className="p-4">
           <div className="flex items-center mb-6">
             <div className="w-8 h-8 bg-gray-800 rounded flex items-center justify-center mr-3">
-              <span className="text-white text-sm font-bold">AI</span>
+              <span className="text-white text-sm font-bold">A+A</span>
             </div>
-            <span className="font-semibold text-gray-800">AI Chatbot</span>
+            <span className="font-semibold text-gray-800">A+A 2025 Asistanı</span>
           </div>
           
           <button className="sidebar-item w-full text-left mb-4">
@@ -87,7 +87,7 @@ export default function Home() {
         {/* Header */}
         <div className="header">
           <div className="flex items-center">
-            <h1 className="text-lg font-semibold">AI Chatbot</h1>
+            <h1 className="text-lg font-semibold">A+A 2025 Asistanı</h1>
           </div>
           <div className="flex items-center space-x-4">
             <button className="p-2 hover:bg-gray-100 rounded-lg">
@@ -105,8 +105,8 @@ export default function Home() {
           <div className="chat-messages">
             {messages.length === 0 ? (
               <div className="welcome-container">
-                <h1 className="welcome-title">Ne üzerinde çalışıyorsun?</h1>
-                <p className="welcome-subtitle">Herhangi bir şey sor</p>
+                <h1 className="welcome-title">A+A 2025 fuarı hakkında ne öğrenmek istiyorsun?</h1>
+                <p className="welcome-subtitle">İş güvenliği ve sağlığı fuarı hakkında sorularını sor</p>
               </div>
             ) : (
               <div>
@@ -135,7 +135,7 @@ export default function Home() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Herhangi bir şey sor"
+                placeholder="A+A 2025 fuarı hakkında soru sor..."
                 className="chat-input"
                 disabled={isLoading}
               />
