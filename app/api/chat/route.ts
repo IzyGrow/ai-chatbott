@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import OpenAI from 'openai'
-import { readdir, readFile } from 'fs/promises'
-import { join } from 'path'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || 'dummy-key',
-})
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'dummy-key')
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,9 +11,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Mesaj bulunamadı' }, { status: 400 })
     }
 
-    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy-key') {
+    if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === 'dummy-key') {
       return NextResponse.json({ 
-        error: 'OpenAI API key eksik. Lütfen Vercel environment variables\'a OPENAI_API_KEY ekleyin.' 
+        error: 'Gemini API key eksik. Lütfen Vercel environment variables\'a GEMINI_API_KEY ekleyin.' 
       }, { status: 500 })
     }
 
@@ -44,7 +40,7 @@ Start-up bölgesi ve Exo Park: Genç girişimcilere özel alanlar ve fiziksel y�
 Salon planı ve profesyonel danışma noktaları: Fuar alanı tematik bölgelere ayrılmış olup, interaktif salon planıyla katılımcılar aradıkları konuları ve firmaları rahatça bulabiliyor. Ayrıca iş sağlığı/güvenliği sorularınız için profesyonel merkezi hizmet veriyor.
     `
 
-    // OpenAI'ye gönderilecek sistem mesajı
+    // Gemini'ye gönderilecek sistem mesajı
     const systemMessage = `Sen A+A 2025 fuarı hakkında uzman bir AI asistanısın. Aşağıdaki fuar bilgilerini kullanarak kullanıcının sorularını yanıtla. Eğer soru fuar içeriğiyle ilgili değilse, bunu belirt ve genel bilgilerle yardımcı olmaya çalış.
 
 A+A 2025 Fuarı Bilgileri:
@@ -52,17 +48,12 @@ ${aaFuarBilgileri}
 
 Kullanıcının sorusunu fuar bilgilerine dayanarak yanıtla. Türkçe yanıt ver ve fuar hakkında detaylı bilgi ver.`
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: systemMessage },
-        { role: "user", content: message }
-      ],
-      max_tokens: 1000,
-      temperature: 0.7,
-    })
-
-    const response = completion.choices[0]?.message?.content || 'Üzgünüm, yanıt oluşturamadım.'
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
+    
+    const prompt = `${systemMessage}\n\nKullanıcı sorusu: ${message}`
+    
+    const result = await model.generateContent(prompt)
+    const response = result.response.text() || 'Üzgünüm, yanıt oluşturamadım.'
 
     return NextResponse.json({ response })
 
@@ -74,9 +65,9 @@ Kullanıcının sorusunu fuar bilgilerine dayanarak yanıtla. Türkçe yanıt ve
     
     if (error instanceof Error) {
       if (error.message.includes('API key')) {
-        errorMessage = 'OpenAI API key geçersiz veya eksik'
+        errorMessage = 'Gemini API key geçersiz veya eksik'
       } else if (error.message.includes('quota')) {
-        errorMessage = 'OpenAI API quota aşıldı'
+        errorMessage = 'Gemini API quota aşıldı'
       } else if (error.message.includes('network')) {
         errorMessage = 'Ağ bağlantı hatası'
       } else {
