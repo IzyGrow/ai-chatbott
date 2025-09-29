@@ -271,17 +271,18 @@ a {
 
 /* AI Icon */
 .ai-icon {
-  width: 60px;
-  height: 60px;
+  width: 200px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 20px;
 }
 
-.ai-icon svg {
+.ai-icon img {
   width: 100%;
   height: 100%;
+  object-fit: contain;
 }
 
 
