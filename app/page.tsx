@@ -156,16 +156,7 @@ export default function Home() {
             {messages.length === 0 ? (
               <div className="welcome-container">
                 <div className="ai-icon">
-                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="16" cy="16" r="16" fill="#3b82f6"/>
-                    <circle cx="12" cy="12" r="2" fill="#ef4444"/>
-                    <circle cx="20" cy="12" r="2" fill="#ef4444"/>
-                    <circle cx="12" cy="18" r="1.5" fill="#fbbf24"/>
-                    <circle cx="20" cy="18" r="1.5" fill="#fbbf24"/>
-                    <rect x="14" y="20" width="4" height="2" rx="1" fill="#6b7280"/>
-                    <path d="M16 8 L16 6" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round"/>
-                    <circle cx="16" cy="4" r="1" fill="#fbbf24"/>
-                  </svg>
+                  <img src="/intime-logo.svg" alt="IN TIME DESIGN" />
                 </div>
                 <h1 className="welcome-title">Fuar Karar Destek Sistemi</h1>
                 <p className="welcome-subtitle">
