@@ -1,0 +1,35 @@
+<svg width="200" height="80" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- IN TIME DESIGN Logo -->
+  
+  <!-- IN kelimesi -->
+  <text x="10" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#374151">IN</text>
+  
+  <!-- TIME kelimesi - I harfi pergel ile değiştirilmiş -->
+  <text x="50" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#374151">T</text>
+  <text x="70" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#374151">M</text>
+  <text x="90" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#374151">E</text>
+  
+  <!-- Pergel (I harfi yerine) -->
+  <!-- Pergel pivot noktası -->
+  <circle cx="60" cy="25" r="2" fill="#374151"/>
+  
+  <!-- Pergel sol kolu -->
+  <path d="M60 25 L45 15" stroke="#374151" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Pergel sağ kolu -->
+  <path d="M60 25 L75 15" stroke="#374151" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Pergel bacakları (turuncu) -->
+  <path d="M60 25 L50 45" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>
+  <path d="M60 25 L70 45" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Kalem ucu (sağ bacak) -->
+  <path d="M70 45 L72 47" stroke="#f97316" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Artı işareti (sol bacak) -->
+  <path d="M48 43 L52 43" stroke="#f97316" stroke-width="2" stroke-linecap="round"/>
+  <path d="M50 41 L50 45" stroke="#f97316" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- DESIGN kelimesi -->
+  <text x="20" y="60" font-family="Arial, sans-serif" font-size="16" font-weight="normal" fill="#374151">DESIGN</text>
+</svg>
