@@ -156,7 +156,10 @@ export default function Home() {
             {messages.length === 0 ? (
               <div className="welcome-container">
                 <div className="ai-icon">
-                  <img src="/intime-logo.svg" alt="IN TIME DESIGN" />
+                  <div className="logo-text">
+                    <div className="logo-top">IN TIME DESIGN</div>
+                    <div className="logo-pergel">📐</div>
+                  </div>
                 </div>
                 <h1 className="welcome-title">Fuar Karar Destek Sistemi</h1>
                 <p className="welcome-subtitle">
