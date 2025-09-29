@@ -155,14 +155,25 @@ export default function Home() {
           <div className="chat-messages">
             {messages.length === 0 ? (
               <div className="welcome-container">
-                <div className="ai-icon">🤖</div>
+                <div className="ai-icon">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="16" cy="16" r="16" fill="#3b82f6"/>
+                    <circle cx="12" cy="12" r="2" fill="#ef4444"/>
+                    <circle cx="20" cy="12" r="2" fill="#ef4444"/>
+                    <circle cx="12" cy="18" r="1.5" fill="#fbbf24"/>
+                    <circle cx="20" cy="18" r="1.5" fill="#fbbf24"/>
+                    <rect x="14" y="20" width="4" height="2" rx="1" fill="#6b7280"/>
+                    <path d="M16 8 L16 6" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round"/>
+                    <circle cx="16" cy="4" r="1" fill="#fbbf24"/>
+                  </svg>
+                </div>
                 <h1 className="welcome-title">Fuar Karar Destek Sistemi</h1>
                 <p className="welcome-subtitle">
                   Fuarlar hakkında sorularınızı sorun, Asistanınız size yanıt verir.
                 </p>
                 
                 <div className="action-cards">
-                  <div className="action-card" onClick={() => setInput("A+A 2025 fuarında hangi ürün kategorileri var?")}>
+                  <div className="action-card" onClick={() => setInput("Fuarlar Hakkında Bilgi Ver")}>
                     <div className="action-card-icon">🛡️</div>
                     <div className="action-card-title">Fuar Bilgileri</div>
                     <div className="action-card-desc">Fuara Ait Sorularınızı Sorun</div>
@@ -174,13 +185,13 @@ export default function Home() {
                     <div className="action-card-desc">Fuar Tarihleri ve Konumları Hakkında Sorularınızı Sorun</div>
                   </div>
                   
-                  <div className="action-card" onClick={() => setInput("Kongre programı hakkında bilgi ver")}>
+                  <div className="action-card" onClick={() => setInput("Fuar Programları Hakkında Bilgi Ver")}>
                     <div className="action-card-icon">🎓</div>
                     <div className="action-card-title">Fuar Programı</div>
                     <div className="action-card-desc">Fuar Programları Hakkında Sorularınızı Sorun</div>
                   </div>
                   
-                  <div className="action-card" onClick={() => setInput("Fuar etkinlikleri neler?")}>
+                  <div className="action-card" onClick={() => setInput("Katılımcılar Hakkında Bilgi Ver")}>
                     <div className="action-card-icon">🎪</div>
                     <div className="action-card-title">Katılımcılar</div>
                     <div className="action-card-desc">Katılımcılar Hakkında Sorularınızı Sorun</div>
