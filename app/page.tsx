@@ -124,15 +124,6 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="mt-auto pt-6 border-t border-gray-200">
-            <div className="flex items-center px-4 text-sm text-gray-500">
-              <span className="mr-2">⚙️</span>
-              Ayarlar
-            </div>
-            <div className="px-4 mt-2 text-xs text-gray-400">
-              Powered by izygrow
-            </div>
-          </div>
         </div>
       </div>
 
@@ -242,6 +233,17 @@ export default function Home() {
             <p className="text-xs text-gray-500 mt-2 text-center">
               AI asistanı yanlış bilgi verebilir. Önemli kararlar için doğrulama yapın.
             </p>
+          </div>
+        </div>
+        
+        {/* Bottom Section */}
+        <div className="bottom-section">
+          <div className="flex items-center justify-center text-sm text-gray-500 mb-2">
+            <span className="mr-2">⚙️</span>
+            Ayarlar
+          </div>
+          <div className="text-center text-xs text-gray-400">
+            Powered by izygrow
           </div>
         </div>
       </div>
