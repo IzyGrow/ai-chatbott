@@ -18,6 +18,8 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [excelData, setExcelData] = useState<any[]>([])
+  const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
   const [chatHistory, setChatHistory] = useState<ChatHistory[]>([])
   const [currentChatId, setCurrentChatId] = useState<string | null>(null)
 
@@ -25,6 +27,35 @@ export default function Home() {
     setMessages([])
     setCurrentChatId(null)
     setInput('')
+  }
+
+  const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+    if (!files || files.length === 0) return
+
+    const formData = new FormData()
+    Array.from(files).forEach(file => {
+      formData.append('files', file)
+    })
+
+    try {
+      const response = await fetch('/api/upload-excel', {
+        method: 'POST',
+        body: formData
+      })
+
+      const result = await response.json()
+      
+      if (result.success) {
+        setExcelData(result.data)
+        setUploadedFiles(result.data.map((file: any) => file.fileName))
+        alert(result.message)
+      } else {
+        alert('Excel dosyaları yüklenirken hata oluştu: ' + result.error)
+      }
+    } catch (error) {
+      alert('Excel dosyaları yüklenirken hata oluştu')
+    }
   }
 
   const sendMessage = async () => {
@@ -55,7 +86,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({ message: input, excelData: excelData }),
       })
 
       const data = await response.json()
@@ -97,6 +128,37 @@ export default function Home() {
             <span className="mr-3">+</span>
             Yeni Sohbet
           </button>
+          
+          <div className="mt-4">
+            <input
+              type="file"
+              id="excel-upload"
+              multiple
+              accept=".xlsx,.xls"
+              onChange={handleExcelUpload}
+              className="hidden"
+            />
+            <label
+              htmlFor="excel-upload"
+              className="sidebar-item w-full text-left cursor-pointer"
+            >
+              <span className="mr-3">📊</span>
+              Excel Yükle
+            </label>
+          </div>
+          
+          {uploadedFiles.length > 0 && (
+            <div className="mt-4">
+              <h4 className="text-xs font-semibold text-gray-500 mb-2 px-4">Yüklenen Dosyalar</h4>
+              <div className="space-y-1">
+                {uploadedFiles.map((fileName, index) => (
+                  <div key={index} className="px-4 text-xs text-gray-400 truncate">
+                    📄 {fileName}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           
           <div className="border-t border-gray-200 pt-6 flex-1">
             <h3 className="text-sm font-semibold text-gray-500 mb-4 px-4">Sohbetler</h3>
