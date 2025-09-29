@@ -5,7 +5,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'dummy-key')
 
 export async function POST(request: NextRequest) {
   try {
-    const { message } = await request.json()
+    const { message, excelData } = await request.json()
 
     if (!message) {
       return NextResponse.json({ error: 'Mesaj bulunamadı' }, { status: 400 })
@@ -50,11 +50,28 @@ Plast Eurasia İstanbul 2025
 3-6 Aralık 2025'te İstanbul TÜYAP'ta, plastik endüstrisinin en büyük ve kapsamlı fuarıdır. Plastik üretim makineleri, plastik hammadde ve kimyasalları, kalıp teknolojileri, plastik geri dönüşüm makineleri, otomasyon ve robotik sistemler, sektöre özel ekipmanlar fuarda yer alır. Türkiye ve dünyadan birçok katılımcı ile iş birliği ve ticaret fırsatları sunulmaktadır.
     `
 
+    // Excel verilerini hazırla
+    let excelBilgileri = ''
+    if (excelData && excelData.length > 0) {
+      excelBilgileri = '\n\nExcel Dosyalarından Veriler:\n'
+      excelData.forEach((file: any) => {
+        excelBilgileri += `\n${file.fileName} (${file.sheetName}):\n`
+        file.data.forEach((row: any, index: number) => {
+          if (index < 10) { // İlk 10 satırı al
+            excelBilgileri += `Satır ${index + 1}: ${JSON.stringify(row)}\n`
+          }
+        })
+        if (file.data.length > 10) {
+          excelBilgileri += `... ve ${file.data.length - 10} satır daha\n`
+        }
+      })
+    }
+
     // Gemini'ye gönderilecek sistem mesajı
     const systemMessage = `Sen fuarlar hakkında uzman bir AI asistanısın. Kullanıcının sorularını kısa, net ve öz şekilde yanıtla. 
 
 Fuar Bilgileri:
-${fuarBilgileri}
+${fuarBilgileri}${excelBilgileri}
 
 Kurallar:
 - Merhaba gibi selamlaşmalarda sadece "Merhaba! Fuarlar hakkında size nasıl yardımcı olabilirim?" şeklinde yanıt ver
@@ -62,6 +79,7 @@ Kurallar:
 - Fuar dışı sorularda "Fuarlar hakkında sorularınızı yanıtlayabilirim" de
 - Fuar tarihleri, listeleri veya çoklu bilgi içeren sorularda madde madde (•) formatında yanıt ver
 - Her maddeyi net ve düzenli şekilde yaz
+- Excel dosyalarındaki verileri de kullanarak yanıt ver
 - Türkçe yanıt ver`
 
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
