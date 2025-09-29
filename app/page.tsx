@@ -235,17 +235,6 @@ export default function Home() {
             </p>
           </div>
         </div>
-        
-        {/* Bottom Section */}
-        <div className="bottom-section">
-          <div className="flex items-center justify-center text-sm text-gray-500 mb-2">
-            <span className="mr-2">⚙️</span>
-            Ayarlar
-          </div>
-          <div className="text-center text-xs text-gray-400">
-            Powered by izygrow
-          </div>
-        </div>
       </div>
     </div>
   )
