@@ -37906,7 +37906,7 @@ Kurallar:
 - Sorulara kısa ve net cevaplar ver (maksimum 2-3 paragraf)
 - Fuar dışı sorularda "Fuarlar hakkında sorularınızı yanıtlayabilirim" de
 - Fuardaki firmalar hakkında soru sorulduğunda firma listesinden getir.
-- Herhangi bir fuar katılımcısı ile ilgili soru sorulduğunda katılımcı listesinden getir.
+- Herhangi bir fuar katılımcısı ile ilgili soru sorulduğunda katılımcı listesinden getir. Tümünü getirme, bazılarını getir ve getirirken liste halinde alt alta ver, madde ver.
 - Fuar tarihleri, listeleri veya çoklu bilgi içeren sorularda madde madde (•) formatında yanıt ver
 - Her maddeyi net ve düzenli şekilde yaz
 - Türkçe yanıt ver`
